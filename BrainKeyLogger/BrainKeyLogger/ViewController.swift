@@ -13,15 +13,18 @@ class ViewController: NSViewController {
     var flagMonitor: Any?
     
     var isLogging: Bool = false
-    @IBOutlet weak var label: NSString!
+    @IBOutlet weak var logs: NSTextView!
+    
     @IBAction func toggleLogging(sender: AnyObject) {
-        
+        self.logs.textStorage?.append(NSAttributedString(string: "setting logging to: \(!self.isLogging)\n"))
         if !self.isLogging {
-            self.keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
-                print(event)
-            }
+//            self.keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
+//                self.logs.textStorage?.append(NSAttributedString(string: "logged: \(event.characters ?? "unknown") at time \(event.timestamp)) with keycode \(event.keyCode)\n"))
+//                print(event)
+//            }
             
             self.flagMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged]) { (event) in
+                self.logs.textStorage?.append(NSAttributedString(string: "logged flagchange to \(event.modifierFlags.rawValue) at time \(event.timestamp)) with keycode \(event.keyCode)\n"))
                 print(event)
             }
             self.isLogging = true
