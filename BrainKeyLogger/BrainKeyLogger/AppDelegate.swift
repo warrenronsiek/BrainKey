@@ -10,8 +10,6 @@ import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var keyMonitor: Any?
-    var flagMonitor: Any?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String : true]
@@ -20,22 +18,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !accessEnabled {
             print("Access Not Enabled")
         }
-        
-        keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
-            print(event)
-        }
-        
-        flagMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged]) { (event) in
-            print(event)
-        }
     }
 
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        NSEvent.removeMonitor(keyMonitor as Any)
-        NSEvent.removeMonitor(flagMonitor as Any)
-    }
-
+    func applicationWillTerminate(_ aNotification: Notification) {}
 
 }
 

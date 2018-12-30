@@ -9,6 +9,30 @@
 import Cocoa
 
 class ViewController: NSViewController {
+    var keyMonitor: Any?
+    var flagMonitor: Any?
+    
+    var isLogging: Bool = false
+    @IBOutlet weak var label: NSString!
+    @IBAction func toggleLogging(sender: AnyObject) {
+        
+        if !self.isLogging {
+            self.keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
+                print(event)
+            }
+            
+            self.flagMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged]) { (event) in
+                print(event)
+            }
+            self.isLogging = true
+        } else {
+            NSEvent.removeMonitor(keyMonitor as Any)
+            NSEvent.removeMonitor(flagMonitor as Any)
+            self.isLogging = false
+        }
+
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
