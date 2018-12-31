@@ -1,0 +1,97 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "AWSSDKSwift",
+        "repositoryURL": "https://github.com/swift-aws/aws-sdk-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "b66a8ad7f949ef80a503069603ad1abd240e7f7d",
+          "version": "2.0.2"
+        }
+      },
+      {
+        "package": "AWSSDKSwiftCore",
+        "repositoryURL": "https://github.com/swift-aws/aws-sdk-swift-core.git",
+        "state": {
+          "branch": null,
+          "revision": "e1d6f9515f95dacd21758e033c27b15a715aeb21",
+          "version": "2.0.0-rc.3"
+        }
+      },
+      {
+        "package": "HypertextApplicationLanguage",
+        "repositoryURL": "https://github.com/Yasumoto/HypertextApplicationLanguage.git",
+        "state": {
+          "branch": null,
+          "revision": "2302002502fe573494577cc6e8df686e385519f8",
+          "version": "1.1.0"
+        }
+      },
+      {
+        "package": "INIParser",
+        "repositoryURL": "https://github.com/PerfectlySoft/Perfect-INIParser.git",
+        "state": {
+          "branch": null,
+          "revision": "0952aac9ca54324ff25191569fd9c48eec424772",
+          "version": "3.0.2"
+        }
+      },
+      {
+        "package": "swift-nio",
+        "repositoryURL": "https://github.com/apple/swift-nio.git",
+        "state": {
+          "branch": null,
+          "revision": "a20e129c22ad00a51c902dca54a5456f90664780",
+          "version": "1.12.0"
+        }
+      },
+      {
+        "package": "swift-nio-ssl",
+        "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
+        "state": {
+          "branch": null,
+          "revision": "db16c3a90b101bb53b26a58867a344ad428072e0",
+          "version": "1.3.2"
+        }
+      },
+      {
+        "package": "swift-nio-ssl-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-ssl-support.git",
+        "state": {
+          "branch": null,
+          "revision": "c02eec4e0e6d351cd092938cf44195a8e669f555",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "swift-nio-transport-services",
+        "repositoryURL": "https://github.com/apple/swift-nio-transport-services.git",
+        "state": {
+          "branch": null,
+          "revision": "fb5d37a1e158daf3f7189587323d5d7f2f338d8c",
+          "version": "0.4.0"
+        }
+      },
+      {
+        "package": "swift-nio-zlib-support",
+        "repositoryURL": "https://github.com/apple/swift-nio-zlib-support.git",
+        "state": {
+          "branch": null,
+          "revision": "37760e9a52030bb9011972c5213c3350fa9d41fd",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "SwiftyJSON",
+        "repositoryURL": "https://github.com/IBM-Swift/SwiftyJSON.git",
+        "state": {
+          "branch": null,
+          "revision": "f2612ea3ac29996ae9601bdcb00cc1c29e26f104",
+          "version": "17.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
