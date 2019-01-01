@@ -1,2 +1,3 @@
 .idea/
-aws-resources.json
+**/aws-resources.json
+**/aws-config.swift

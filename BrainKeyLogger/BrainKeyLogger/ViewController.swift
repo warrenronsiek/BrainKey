@@ -9,15 +9,11 @@
 import Cocoa
 
 
-
 class ViewController: NSViewController {
     var keyMonitor: Any?
     var flagMonitor: Any?
     
     var isLogging: Bool = false
-    var key = ""
-    var secret = ""
-    var stream = ""
     @IBOutlet weak var logs: NSTextView!
     
     @IBAction func toggleLogging(sender: AnyObject) {
@@ -45,7 +41,7 @@ class ViewController: NSViewController {
         let task = Process()
         task.launchPath = "."
         //keep the space before the access key, it stops the command from showing up in the command history
-        task.arguments = ["  AWS_ACCESS_KEY=\(self.key) AWS_SECRET_ACCESS_KEY=\(self.secret)","aws", "firehose", "put-record", "--delivery-stream-name \(self.stream)"]
+        task.arguments = ["  AWS_ACCESS_KEY=\(key) AWS_SECRET_ACCESS_KEY=\(secret)","aws", "firehose", "put-record", "--delivery-stream-name \(stream)", "--record", "Data=\(data)"]
         task.launch()
     }
     
@@ -58,20 +54,6 @@ class ViewController: NSViewController {
         
         if !accessEnabled {
             self.logs.textStorage?.append(NSAttributedString(string: "ERROR: permission not yet granted"))
-        }
-        
-        if let path = Bundle.main.path(forResource: "./aws-resources.json", ofType: "json") {
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
-                let jsonResult = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves)
-                if let jsonResult = jsonResult as? Dictionary<String, String> {
-                    self.key = jsonResult["key"] ?? ""
-                    self.secret = jsonResult["secret"] ?? ""
-                    self.stream = jsonResult["stream"] ?? ""
-                }
-            } catch {
-                self.logs.textStorage?.append(NSAttributedString(string: "ERROR: unable to configure aws resources"))
-            }
         }
     }
 
