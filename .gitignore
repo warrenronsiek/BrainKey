@@ -1,0 +1,4 @@
+.idea/
+**/.idea/
+**/aws-resources.json
+**/aws-config.swift

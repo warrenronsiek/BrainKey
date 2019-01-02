@@ -1,0 +1,95 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: ''
+Resources:
+  BrainKeyLoggerHoseRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: firehose.amazonaws.com
+          Action: sts:AssumeRole
+      Policies:
+      - PolicyName: FirehoseToS3WritePolicy
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: logs:PutLogEvents
+            Resource:
+            - Fn::Join:
+              - ''
+              - - 'arn:aws:logs:'
+                - Ref: AWS::Region
+                - ":"
+                - Ref: AWS::AccountId
+                - ":log-group:"
+                - Ref: "BrainKeyLoggerLogGroup"
+                - ":log-setream:"
+                - Ref: "BrainKeyLoggerHoseLogs"
+          - Effect: Allow
+            Action:
+            - s3:AbortMultipartUpload
+            - s3:GetBucketLocation
+            - s3:GetObject
+            - s3:ListBucket
+            - s3:ListBucketMultipartUploads
+            - s3:PutObject
+            Resource:
+            - Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Ref: "BrainKeyLoggerBucket"
+            - Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Ref: "BrainKeyLoggerBucket"
+                - "/*"
+  BrainKeyLoggerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: BrainKeyLoggerLogGroup
+      RetentionInDays: 3
+  BrainKeyLoggerHoseLogs:
+    Type: AWS::Logs::LogStream
+    Properties:
+      LogStreamName: BrainKeyLoggerHosLog
+      LogGroupName:
+        Ref: "BrainKeyLoggerLogGroup"
+  BrainKeyLoggerLogs:
+    Type: AWS::Logs::LogStream
+    Properties:
+      LogStreamName: BrainKeyLoggerLogs
+      LogGroupName:
+        Ref: "BrainKeyLoggerLogGroup"
+  BrainKeyLoggerHose:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: BrainKeyLoggerHose
+      S3DestinationConfiguration:
+        BucketARN:
+          Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: "BrainKeyLoggerBucket"
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 20
+        RoleARN:
+          Fn::GetAtt:
+          - "BrainKeyLoggerHoseRole"
+          - Arn
+        CompressionFormat: ZIP
+        Prefix: keylogs
+        CloudWatchLoggingOptions:
+          Enabled: true
+          LogGroupName:
+            Ref: "BrainKeyLoggerLogGroup"
+          LogStreamName:
+            Ref: "BrainKeyLoggerHoseLogs"
+  BrainKeyLoggerBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: brainkeylogger
