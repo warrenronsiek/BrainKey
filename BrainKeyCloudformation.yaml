@@ -82,7 +82,7 @@ Resources:
           - "BrainKeyLoggerHoseRole"
           - Arn
         CompressionFormat: ZIP
-        Prefix: keylogs
+        Prefix: keylogs/keylogs
         CloudWatchLoggingOptions:
           Enabled: true
           LogGroupName:
@@ -93,3 +93,17 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: brainkeylogger
+  BrainKeyHoseWriter:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: BrainKeyHoseWriter
+      Policies:
+        - PolicyName: WriteToBrainKeyHose
+          PolicyDocument:
+            Statement:
+              Effect: Allow
+              Action:
+                - firehose:PutRecord
+                - firehose:PutRecordBatch
+              Resource:
+                - Fn::GetAtt: [BrainKeyLoggerHose, Arn]
